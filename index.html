@@ -3,12 +3,133 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello World</title>
-  <link href='/style.css' rel='stylesheet'>
+  <title>Lotto Number Generator</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f2f5;
+    }
+
+    .container {
+      text-align: center;
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 500px;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 2rem;
+    }
+
+    .numbers-container {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      min-height: 60px;
+      margin-bottom: 2rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .ball {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.2rem;
+      box-shadow: inset -3px -3px 5px rgba(0, 0, 0, 0.2), 0 2px 5px rgba(0, 0, 0, 0.1);
+      animation: popIn 0.3s ease-out;
+    }
+
+    .placeholder {
+      color: #888;
+      font-style: italic;
+    }
+
+    button {
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0); opacity: 0; }
+      80% { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <button onclick="console.log('hello');">Press me</button>
-  <script defer type="text/javascript" src="/main.js"></script>
+  <div class="container">
+    <h1>Lotto Number Generator</h1>
+    <div id="lotto-numbers" class="numbers-container">
+      <div class="placeholder">Press the button to generate numbers!</div>
+    </div>
+    <button id="generate-btn">Generate Numbers</button>
+  </div>
+
+  <script>
+    document.getElementById('generate-btn').addEventListener('click', () => {
+      const lottoNumbers = generateLottoNumbers();
+      displayNumbers(lottoNumbers);
+    });
+
+    function generateLottoNumbers() {
+      const numbers = [];
+      while (numbers.length < 6) {
+        const randomNum = Math.floor(Math.random() * 45) + 1;
+        if (!numbers.includes(randomNum)) {
+          numbers.push(randomNum);
+        }
+      }
+      return numbers.sort((a, b) => a - b);
+    }
+
+    function displayNumbers(numbers) {
+      const container = document.getElementById('lotto-numbers');
+      container.innerHTML = '';
+      numbers.forEach(num => {
+        const ball = document.createElement('div');
+        ball.className = 'ball';
+        ball.textContent = num;
+        ball.style.backgroundColor = getBallColor(num);
+        container.appendChild(ball);
+      });
+    }
+
+    function getBallColor(num) {
+      if (num <= 10) return '#fbc400'; // Yellow
+      if (num <= 20) return '#69c8f2'; // Blue
+      if (num <= 30) return '#ff7272'; // Red
+      if (num <= 40) return '#aaa';    // Grey
+      return '#b0d840';                // Green
+    }
+  </script>
 </body>
 </html>
